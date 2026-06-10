@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Real-ESRGAN</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <main class="page">
+        <section class="hero panel">
+            <div class="hero-copy">
+                <p class="hero-tag" id="heroTag"></p>
+                <h1 id="heroTitle"></h1>
+                <p class="hero-subtitle" id="heroSubtitle"></p>
+                <p class="hero-desc" id="heroDesc"></p>
+            </div>
+            <div class="hero-status">
+                <div class="status-card">
+                    <span class="status-label" id="statusLabel"></span>
+                    <strong id="healthStatus"></strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="tabs">
+            <button class="tab-button active" data-tab="single" id="tabButtonSingle"></button>
+            <button class="tab-button" data-tab="batch" id="tabButtonBatch"></button>
+            <button class="tab-button" data-tab="guide" id="tabButtonGuide"></button>
+        </section>
+
+        <section class="tab-panel active" id="tab-single">
+            <div class="layout-two">
+                <article class="panel form-panel">
+                    <h2 id="singlePanelTitle"></h2>
+                    <div class="field">
+                        <label for="imageInput" id="singleUploadLabel"></label>
+                        <input id="imageInput" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+                    </div>
+
+                    <div class="field">
+                        <label for="modelName" id="singleModelLabel"></label>
+                        <select id="modelName"></select>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="outscale" id="singleOutscaleLabel"></label>
+                            <input id="outscale" type="number" min="1" step="0.5" value="4">
+                        </div>
+                        <div class="field">
+                            <label for="denoiseStrength" id="singleDenoiseLabel"></label>
+                            <input id="denoiseStrength" type="number" min="0" max="1" step="0.1" value="0.5">
+                        </div>
+                        <div class="field">
+                            <label for="tile" id="singleTileLabel"></label>
+                            <input id="tile" type="number" min="0" step="64" value="256">
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <p id="singleTipTitle"></p>
+                        <ul>
+                            <li id="singleTip1"></li>
+                            <li id="singleTip2"></li>
+                            <li id="singleTip3"></li>
+                        </ul>
+                    </div>
+
+                    <div class="action-row">
+                        <button id="submitButton" type="button" class="primary-button"></button>
+                        <span id="loadingText" class="loading-text" hidden></span>
+                    </div>
+
+                    <div class="message error" id="errorMessage" hidden></div>
+                </article>
+
+                <article class="panel preview-panel">
+                    <h2 id="singleResultTitle"></h2>
+                    <div class="preview-grid">
+                        <div class="preview-card">
+                            <h3 id="originalPreviewTitle"></h3>
+                            <div class="image-frame">
+                                <img id="originalPreview" alt="">
+                            </div>
+                        </div>
+
+                        <div class="preview-card">
+                            <h3 id="resultPreviewTitle"></h3>
+                            <div class="image-frame">
+                                <img id="resultPreview" alt="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card">
+                        <div class="comparison-header">
+                            <h3 id="comparisonTitle"></h3>
+                            <p id="comparisonDesc"></p>
+                        </div>
+                        <div class="image-frame comparison-frame">
+                            <img id="comparisonPreview" alt="">
+                        </div>
+                    </div>
+
+                    <div class="download-row">
+                        <a id="downloadButton" class="ghost-button disabled" href="#" download aria-disabled="true"></a>
+                        <a id="comparisonDownloadButton" class="ghost-button disabled" href="#" download aria-disabled="true"></a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="tab-panel" id="tab-batch">
+            <div class="layout-two batch-layout">
+                <article class="panel form-panel">
+                    <h2 id="batchPanelTitle"></h2>
+                    <div class="field">
+                        <label for="batchImageInput" id="batchUploadLabel"></label>
+                        <input id="batchImageInput" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+                    </div>
+
+                    <div class="file-list" id="batchFileList"></div>
+
+                    <div class="field">
+                        <label for="batchModelName" id="batchModelLabel"></label>
+                        <select id="batchModelName"></select>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="batchOutscale" id="batchOutscaleLabel"></label>
+                            <input id="batchOutscale" type="number" min="1" step="0.5" value="4">
+                        </div>
+                        <div class="field">
+                            <label for="batchDenoiseStrength" id="batchDenoiseLabel"></label>
+                            <input id="batchDenoiseStrength" type="number" min="0" max="1" step="0.1" value="0.5">
+                        </div>
+                        <div class="field">
+                            <label for="batchTile" id="batchTileLabel"></label>
+                            <input id="batchTile" type="number" min="0" step="64" value="256">
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <button id="batchSubmitButton" type="button" class="primary-button"></button>
+                        <span id="batchLoadingText" class="loading-text" hidden></span>
+                    </div>
+
+                    <div class="message error" id="batchErrorMessage" hidden></div>
+                </article>
+
+                <article class="panel result-panel">
+                    <div class="result-panel-head">
+                        <div>
+                            <h2 id="batchResultTitle"></h2>
+                            <p id="batchResultDesc"></p>
+                        </div>
+                        <a id="zipDownloadButton" class="primary-button disabled" href="#" download aria-disabled="true"></a>
+                    </div>
+                    <div class="batch-results-grid" id="batchResultsGrid"></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="tab-panel" id="tab-guide">
+            <article class="panel guide-panel">
+                <h2 id="guideTitle"></h2>
+                <div class="guide-grid">
+                    <section>
+                        <h3 id="guideIntroTitle"></h3>
+                        <p id="guideIntroText"></p>
+                    </section>
+
+                    <section>
+                        <h3 id="guideStepsTitle"></h3>
+                        <ol>
+                            <li id="guideStep1"></li>
+                            <li id="guideStep2"></li>
+                            <li id="guideStep3"></li>
+                            <li id="guideStep4"></li>
+                            <li id="guideStep5"></li>
+                        </ol>
+                    </section>
+
+                    <section>
+                        <h3 id="guideParamTitle"></h3>
+                        <ul>
+                            <li id="guideParam1"></li>
+                            <li id="guideParam2"></li>
+                            <li id="guideParam3"></li>
+                            <li id="guideParam4"></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3 id="guideNoticeTitle"></h3>
+                        <ul>
+                            <li id="guideNotice1"></li>
+                            <li id="guideNotice2"></li>
+                            <li id="guideNotice3"></li>
+                            <li id="guideNotice4"></li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3 id="guideFaqTitle"></h3>
+                        <ul>
+                            <li id="guideFaq1"></li>
+                            <li id="guideFaq2"></li>
+                            <li id="guideFaq3"></li>
+                        </ul>
+                    </section>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <script src="./js/main.js"></script>
+</body>
+</html>

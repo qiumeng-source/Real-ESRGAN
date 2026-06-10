@@ -138,3 +138,20 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Generated output files
+batch_outputs/
+outputs/*.png
+
+# Backend upload and result files
+backend/static/uploads/*
+backend/static/results/*
+backend/static/results/*.zip
+!backend/static/uploads/.gitkeep
+!backend/static/results/.gitkeep
+
+# Python cache and virtual environment
+__pycache__/
+*.pyc
+venv/
+.venv/
